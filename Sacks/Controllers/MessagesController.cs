@@ -14,19 +14,6 @@ namespace Sacks.Controllers
     {
         private readonly string DB_PATH = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/messages.json");
 
-        private List<Message> GetAllMessages()
-        {
-            var fileContents = File.ReadAllText(DB_PATH);
-            List<Message> allMessages = JsonConvert.DeserializeObject<List<Message>>(fileContents);
-            return allMessages;
-        }
-
-        private void SaveMessages(List<Message> messages)
-        {
-            throw new NotImplementedException();
-        }
-
-
         // GET: api/Messages
         public IEnumerable<Message> Get()
         {
@@ -86,6 +73,23 @@ namespace Sacks.Controllers
             var messages = GetAllMessages();
             messages = messages.Where(m => m.Id != id).ToList();
             SaveMessages(messages);
+        }
+
+
+
+        private List<Message> GetAllMessages()
+        {
+            var fileContents = File.ReadAllText(DB_PATH);
+            List<Message> allMessages = JsonConvert.DeserializeObject<List<Message>>(fileContents);
+            return allMessages;
+        }
+
+        private void SaveMessages(List<Message> messages)
+        {
+
+            var str = JsonConvert.SerializeObject(messages);
+            File.WriteAllText(DB_PATH, str);
+
         }
     }
 }
